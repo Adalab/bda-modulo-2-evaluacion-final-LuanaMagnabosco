@@ -46,8 +46,9 @@ WHERE actor_id BETWEEN 10 AND 20;
 
 /* 8. Encuentra el título de las películas en la tabla film que no sean ni "R" ni "PG-13" en cuanto a su clasiﬁcación. */
 
-SELECT title AS 'Título',
-rating AS 'Clasificación'
+SELECT 
+	title AS 'Título',
+	rating AS 'Clasificación'
 FROM film
 WHERE rating NOT LIKE "R" OR "PG-13";
 
@@ -87,19 +88,69 @@ GROUP BY film.rating;
 
 /* 13. Encuentra el nombre y apellido de los actores que aparecen en la película con title "Indian Love". */
 
+SELECT
+	actor.first_name,
+    actor.last_name
+FROM actor
+JOIN film_actor ON actor.actor_id = film_actor.actor_id
+JOIN film ON film_actor.film_id = film.film_id 
+WHERE film.title = "Indian Love";
+
 /* 14. Muestra el título de todas las películas que contengan la palabra "dog" o "cat" en su descripción. */
+
+SELECT title
+FROM film 
+WHERE description LIKE '%dog%' OR description LIKE '%cat%'; 
 
 /* 15. Hay algún actor o actriz que no apareca en ninguna película en la tabla film_actor. */
 
+
 /* 16. Encuentra el título de todas las películas que fueron lanzadas entre el año 2005 y 2010. */
+
+SELECT title
+FROM film
+WHERE release_year;
 
 /* 17. Encuentra el título de todas las películas que son de la misma categoría que "Family". */
 
+SELECT 
+	film.title
+FROM film
+JOIN film_category ON film.film_id = film_category.film_id
+JOIN category ON film_category.category_id = category.category_id
+WHERE category.name = 'Family';
+
 /* 18. Muestra el nombre y apellido de los actores que aparecen en más de 10 películas. */
+
+SELECT
+	actor.first_name,
+    actor.last_name
+FROM actor
+JOIN film_actor ON actor.actor_id = film_actor.actor_id
+GROUP BY
+	actor.actor_id,
+    actor.first_name,
+    actor.last_name
+HAVING COUNT(film_actor.film_id) > 10;
 
 /* 19. Encuentra el título de todas las películas que son "R" y tienen una duración mayor a 2 horas en la tabla film. */
 
+SELECT
+	film.title
+FROM film
+WHERE film.rating = 'R' AND film.length > 120;
+
 /* 20. Encuentra las categorías de películas que tienen un promedio de duración superior a 120 minutos y muestra el nombre de la categoría junto con el promedio de duración. */
+
+SELECT
+	category.name,
+    AVG(film.length)
+FROM category
+JOIN film_category ON category.category_id = film_category.category_id
+JOIN film ON film_category.film_id = film.film_id
+GROUP BY category.name
+HAVING AVG(film.length)> '120';
+
 
 /* 21. Encuentra los actores que han actuado en al menos 5 películas y muestra el nombre del actor junto con la cantidad de películas en las que han actuado. */
 
