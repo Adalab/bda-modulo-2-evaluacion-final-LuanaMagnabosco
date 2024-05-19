@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # bda-modulo-2-evaluacion-final-LuanaMagnabosco
 
 Evaluación Final Módulo 2
@@ -14,6 +14,3 @@ Evaluación Final Módulo 2
 
 	📌 Estas tablas contienen información sobre películas, actores, clientes, alquileres y más, 
 	y se utilizan para realizar consultas y análisis de datos en el contexto de una tienda de alquiler de películas. 📈 
-=======
-# bda-modulo-2-evaluacion-final-LuanaMagnabosco
->>>>>>> dccbc2e (Ejercicios resueltos hasta el 21)
