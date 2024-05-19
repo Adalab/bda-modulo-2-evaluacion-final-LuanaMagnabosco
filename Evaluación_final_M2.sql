@@ -77,12 +77,22 @@ GROUP BY
 
 /* 11. Encuentra la cantidad total de películas alquiladas por categoría y muestra el nombre de la categoría junto con el recuento de alquileres. */
 
+SELECT
+    category.name AS 'Category',
+    COUNT(rental.rental_id) AS 'Rental'
+FROM category
+INNER JOIN film_category ON category.category_id = film_category.category_id
+INNER JOIN film ON film_category.film_id = film.film_id
+INNER JOIN inventory ON film.film_id = inventory.film_id
+INNER JOIN rental ON inventory.inventory_id = rental.inventory_id
+GROUP BY category.name;
+
+
 /* 12. Encuentra el promedio de duración de las películas para cada clasiﬁcación de la tabla film y muestra la clasiﬁcación junto con el promedio de duración. */
 
 SELECT 
 	film.rating AS 'Clasificación',
 	AVG(film.length) AS 'Promedio'
-    
 FROM film
 GROUP BY film.rating;
 
@@ -92,8 +102,8 @@ SELECT
 	actor.first_name,
     actor.last_name
 FROM actor
-JOIN film_actor ON actor.actor_id = film_actor.actor_id
-JOIN film ON film_actor.film_id = film.film_id 
+INNER JOIN film_actor ON actor.actor_id = film_actor.actor_id
+INNER JOIN film ON film_actor.film_id = film.film_id 
 WHERE film.title = "Indian Love";
 
 /* 14. Muestra el título de todas las películas que contengan la palabra "dog" o "cat" en su descripción. */
@@ -104,6 +114,12 @@ WHERE description LIKE '%dog%' OR description LIKE '%cat%';
 
 /* 15. Hay algún actor o actriz que no apareca en ninguna película en la tabla film_actor. */
 
+SELECT
+    actor.first_name,
+    actor.last_name
+FROM actor
+LEFT JOIN film_actor ON actor.actor_id = film_actor.actor_id
+WHERE film_actor.actor_id IS NULL;
 
 /* 16. Encuentra el título de todas las películas que fueron lanzadas entre el año 2005 y 2010. */
 
@@ -116,8 +132,8 @@ WHERE release_year;
 SELECT 
 	film.title
 FROM film
-JOIN film_category ON film.film_id = film_category.film_id
-JOIN category ON film_category.category_id = category.category_id
+INNER JOIN film_category ON film.film_id = film_category.film_id
+INNER JOIN category ON film_category.category_id = category.category_id
 WHERE category.name = 'Family';
 
 /* 18. Muestra el nombre y apellido de los actores que aparecen en más de 10 películas. */
@@ -126,7 +142,7 @@ SELECT
 	actor.first_name,
     actor.last_name
 FROM actor
-JOIN film_actor ON actor.actor_id = film_actor.actor_id
+INNER JOIN film_actor ON actor.actor_id = film_actor.actor_id
 GROUP BY
 	actor.actor_id,
     actor.first_name,
@@ -146,14 +162,27 @@ SELECT
 	category.name,
     AVG(film.length)
 FROM category
-JOIN film_category ON category.category_id = film_category.category_id
-JOIN film ON film_category.film_id = film.film_id
+INNER JOIN film_category ON category.category_id = film_category.category_id
+INNER JOIN film ON film_category.film_id = film.film_id
 GROUP BY category.name
 HAVING AVG(film.length)> '120';
 
 
 /* 21. Encuentra los actores que han actuado en al menos 5 películas y muestra el nombre del actor junto con la cantidad de películas en las que han actuado. */
 
+SELECT
+    actor.first_name,
+    actor.last_name,
+    COUNT(film_actor.film_id) AS num_peliculas
+FROM actor
+INNER JOIN film_actor ON actor.actor_id = film_actor.actor_id
+GROUP BY 
+	actor.actor_id, 
+    actor.first_name, 
+    actor.last_name
+HAVING
+    COUNT(film_actor.film_id) >= 5;
+    
 /* 22. Encuentra el título de todas las películas que fueron alquiladas por más de 5 días. Utiliza una subconsulta para encontrar los rental_ids con una duración superior a 5 días y luego selecciona las películas correspondientes.*/
 
 /* 23. Encuentra el nombre y apellido de los actores que no han actuado en ninguna película de la categoría "Horror". Utiliza una subconsulta para encontrar los actores que han actuado en películas de la categoría "Horror" y luego exclúyelos de la lista de actores. */
